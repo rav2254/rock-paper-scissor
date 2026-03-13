@@ -1,91 +1,71 @@
 const CHOICES = ['rock','paper','scissor']
+let turns = 5;
+let score = 0;
+resultDisplay = document.querySelector('#resultDisplay');
+scoreDisplay = document.querySelector('#scoreDisplay');
+let btn = document.querySelector('.container');
 
 function getComputerChoice(){
-    const intChoice = Math.floor(Math.random()*3)
-    return CHOICES[intChoice]
+   const intChoice = Math.floor(Math.random()*3)
+   return CHOICES[intChoice]
 }
 
-function getHumanChoice(){
-    let HumanChoice = prompt('Pick between rock, paper and scissor').toLowerCase()
-    while (!(CHOICES.includes(HumanChoice))){
-        HumanChoice = prompt(`Not a valid option, please pick again.
-Your choices are rock, paper and scissor`).toLowerCase()
-    }
-    return HumanChoice
-}
+function round(humanChoice){
 
-function round(turns, score){
+    const computerChoice = getComputerChoice()
 
-    while (turns>0){
-
-        const computerChoice = getComputerChoice()
-        const humanChoice = getHumanChoice()
-
-        if (humanChoice===computerChoice){
-            alert('Its a draw!')
-        }else if(humanChoice==='rock'){
-            switch(computerChoice) {
-                case 'paper':
-                    alert('You lost :( ')
-                    --score
-                    break
-                case 'scissor':
-                    alert('Yay! you won')
-                    ++score
-                    break
-            }
-        }else if (humanChoice==='paper'){
-            switch(computerChoice){
-                case 'rock':
-                    alert('Yay! you won')
-                    ++score
-                    break
-                case 'scissor':
-                    alert('You lost :( ')
-                    --score
-                    break
-            }
-        }else if (humanChoice==='scissor'){
-            switch(computerChoice){
-                case 'rock':
-                    case 'scissor':
-                    alert('You lost :( ')
-                    --score
-                    break
-                case 'paper':
-                    alert('Yay! you won')
-                    ++score
-                    break
-            }
+    if (humanChoice===computerChoice){
+        resultDisplay.textContent= 'It is a draw'
+    }else if(humanChoice==='rock'){
+        switch(computerChoice) {
+            case 'paper':
+                resultDisplay.textContent= 'You lost! :('
+                --score
+                break
+            case 'scissor':
+                resultDisplay.textContent= 'Yay! You won!'
+                ++score
+                break
         }
+    }else if (humanChoice==='paper'){
+        switch(computerChoice){
+            case 'rock':
+                resultDisplay.textContent= 'Yay! You won!'
+                ++score
+                break
+            case 'scissor':
+                resultDisplay.textContent= 'You lost! :('
+                --score
+                break
+        }
+    }else if (humanChoice==='scissor'){
+        switch(computerChoice){
+            case 'rock':
+                case 'scissor':
+                resultDisplay.textContent= 'You lost! :('
+                --score
+                break
+            case 'paper':
+                resultDisplay.textContent= 'Yay! You won!'
+                ++score
+                break
+        }
+    }
             
 
         --turns
-        alert(`Your score is ${score}
-you have ${turns} turn(s) left`)
-    }
+        scoreDisplay.textContent = `Your score is ${score}, you have ${turns} turns left`;
+    
     return score
 }
 
-function game(){
-    let turns = +prompt(`Let's play rock, paper, scissor- enter the number of rounds you want to play`)
-    while (!(Number.isInteger(turns))){
-        turns = +prompt('Please choose a number for the number of rounds you would like to play')
-    }
 
-    alert(`Best of ${turns} wins. Good luck!`)
+btn.addEventListener('click', e=>{
+    humanChoice = e.target.closest('button').id;
+    if (turns>0){
+        round(humanChoice);
+    }else {
+        scoreDisplay.textContent = `No turns left refresh the page to try again. Your final score was ${score}`
+        resultDisplay.textContent = ` `}
+})
 
-    score = round(turns, 0)
-
-    if (score<0){alert('You lost, better luck next time bozo!')
-
-    }else if (score===0){alert('Well, this was a waste of time')
-
-    }else {alert('Congratulations, you won against a basic computer, You must be proud')}
-
-    alert("Hit refresh to play again!")
-
-
-}
-
-game()
